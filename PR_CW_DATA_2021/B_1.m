@@ -85,27 +85,15 @@ disp('Projection Matrix:');
 disp(F);
 
 %plot two large eigenvector
-meanData = mean(combinedData, 1);
-figure
-quiver(meanData(1), meanData(2), F(1,1), F(2,1), 'r', 'LineWidth', 2);
-hold on;
-quiver(meanData(1), meanData(2), F(1,2), F(2,2), 'g', 'LineWidth', 2);
-
-xlabel('Feature 1');
-ylabel('Feature 2');
-title('Eigenvectors of the Two Largest Eigenvalues');
-hold off;
-axis equal; % Set the aspect ratio such that the arrows are properly scaled
-grid on;
-
+meanData = mean(combinedData);
 
 %project tandardized data onto the two largest principal components 
 projectedData = combinedData * F;
+meanProjectedData = mean(projectedData, 1);
 
 %plot 2D
-figure;
+figure
 hold on;
-
 %set object labels
 numDataPointsPerObject = size(projectedData, 1) / 6;
 objectLabels = repmat(1:6, numDataPointsPerObject, 1);
@@ -118,13 +106,15 @@ for obj = 1:6
     % Plot with corresponding color
     scatter(projectedData(objIndices,1), projectedData(objIndices,2), 36, colors(obj,:), 'filled');
 end
-
+quiver(meanProjectedData(1), meanProjectedData(2), F(1,1), F(2,1), 'r', 'LineWidth', 2, 'AutoScale', 'off');
+quiver(meanProjectedData(1), meanProjectedData(2), F(1,2), F(2,2), 'g', 'LineWidth', 2, 'AutoScale', 'off');
+axis equal;
 hold off;
 
 xlabel('Principal Component 1');
 ylabel('Principal Component 2');
 title('2D PCA Projection of PVT Data');
-legend('acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase');
+legend('acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase','Eigenvector 1','Eigenvector 2');
 
 
 %question d
