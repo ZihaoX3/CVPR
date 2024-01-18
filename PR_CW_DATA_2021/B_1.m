@@ -67,7 +67,6 @@ legend();
 legend('Eigenvector 1', 'Eigenvector 2', 'Eigenvector 3', 'acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase');
 
 
-
 %question_c
 eigenvalues = diag(eigenvalues);
 % Sort the eigenvalues in descending order and get indices
@@ -85,12 +84,32 @@ disp(largest_eigenvalues);
 disp('Projection Matrix:');
 disp(F);
 
+%plot two large eigenvector
+meanData = mean(combinedData, 1);
+figure
+quiver(meanData(1), meanData(2), F(1,1), F(2,1), 'r', 'LineWidth', 2);
+hold on;
+quiver(meanData(1), meanData(2), F(1,2), F(2,2), 'g', 'LineWidth', 2);
+
+xlabel('Feature 1');
+ylabel('Feature 2');
+title('Eigenvectors of the Two Largest Eigenvalues');
+hold off;
+axis equal; % Set the aspect ratio such that the arrows are properly scaled
+grid on;
+
+
 %project tandardized data onto the two largest principal components 
 projectedData = combinedData * F;
 
 %plot 2D
 figure;
 hold on;
+
+%set object labels
+numDataPointsPerObject = size(projectedData, 1) / 6;
+objectLabels = repmat(1:6, numDataPointsPerObject, 1);
+objectLabels = objectLabels(:);
 
 for obj = 1:6
     % Logical indexing to select rows
@@ -107,8 +126,8 @@ ylabel('Principal Component 2');
 title('2D PCA Projection of PVT Data');
 legend('acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase');
 
-%question d
 
+%question d
 figure;
 
 % Number of principal components
