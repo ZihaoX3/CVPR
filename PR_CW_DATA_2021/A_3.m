@@ -1,19 +1,27 @@
+% Load the data
 load('F0_PVT.mat');
-scatter3(Pressure(:,1), Vibration(:,1), Temperature(:,1), 36, 'filled');
+
+% Create a colormap with as many colors as you have objects
+colors = lines(6);
+
+% Create a new figure
+figure;
+
+hold on;
+% Loop over each object and plot with a unique color
+for i = 1:size(Pressure, 1)
+    scatter3(Pressure(i,:), Vibration(i,:), Temperature(i,:), 36, colors(i,:), 'filled');
+end
+
+hold off;
+
+% Label the axes
 xlabel('Pressure');
 ylabel('Vibration');
 zlabel('Temperature');
 title('3D Scatter Plot of PVT Data');
-grid on;  % Add a grid for easier visualization
-colors = lines(6); % Create a colormap with 6 colors
-
-
-hold on;
-
-%paint color
-for i = 1:size(Pressure, 1) 
-    scatter3(Pressure(i,1), Vibration(i,1), Temperature(i,1), 36, colors(i,:), 'filled');
-end
-hold off;
-
+grid on;
 legend('acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase');
+
+% Set the view for 3D plot
+view(3);
