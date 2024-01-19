@@ -67,6 +67,7 @@ legend();
 legend('Eigenvector 1', 'Eigenvector 2', 'Eigenvector 3', 'acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase');
 
 
+
 %question_c
 eigenvalues = diag(eigenvalues);
 % Sort the eigenvalues in descending order and get indices
@@ -84,38 +85,18 @@ disp(largest_eigenvalues);
 disp('Projection Matrix:');
 disp(F);
 
-%plot two large eigenvector
-meanData = mean(combinedData);
 
-%project tandardized data onto the two largest principal components 
+% question c
 projectedData = combinedData * F;
-meanProjectedData = mean(projectedData, 1);
+disp('Projected Data:');
+disp(projectedData);
 
-%plot 2D
-figure
+figure;
 hold on;
-%set object labels
-numDataPointsPerObject = size(projectedData, 1) / 6;
-objectLabels = repmat(1:6, numDataPointsPerObject, 1);
-objectLabels = objectLabels(:);
-
-for obj = 1:6
-    % Logical indexing to select rows
-    objIndices = objectLabels == obj;
-    
-    % Plot with corresponding color
-    scatter(projectedData(objIndices,1), projectedData(objIndices,2), 36, colors(obj,:), 'filled');
+for i = 1:size(projectedData, 1)
+    plot(projectedData(i, 1), projectedData(i, 2), '.');
 end
-quiver(meanProjectedData(1), meanProjectedData(2), F(1,1), F(2,1), 'r', 'LineWidth', 2, 'AutoScale', 'off');
-quiver(meanProjectedData(1), meanProjectedData(2), F(1,2), F(2,2), 'g', 'LineWidth', 2, 'AutoScale', 'off');
-axis equal;
 hold off;
-
-xlabel('Principal Component 1');
-ylabel('Principal Component 2');
-title('2D PCA Projection of PVT Data');
-legend('acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase','Eigenvector 1','Eigenvector 2');
-
 
 %question d
 figure;
@@ -131,7 +112,3 @@ for i = 1:numPCs
     % Label y-axis as the current principal component
     ylabel(['PC' num2str(i)]);
 end
-
-xlabel('Component Score'); 
-%title for all
-sgtitle('Distribution Across Principal Components');
