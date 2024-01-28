@@ -57,3 +57,6 @@ for i = 1:length(feature_pairs)
     legend('Black Foam', 'Car Sponge');
     hold off;
 end
+
+%COMMENT ON RESULT, FOR TEMPERATURE AND VIRB the car and black are not easy
+%to seperated

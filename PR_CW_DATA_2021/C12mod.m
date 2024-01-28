@@ -1,0 +1,74 @@
+% Load the data from the .mat file
+data = load('Lab1/F0_PVT.mat');
+
+pressure = data.Pressure;
+temperature = data.Temperature;
+vibration = data.Vibration;
+
+% Initialize matrices with three columns for Pressure, Vibration, and Temperature
+X_black_foam = zeros(size(pressure, 2), 3);
+X_car_sponge = zeros(size(pressure, 2), 3);
+
+% Extract data for black foam and car sponge
+for i = 1 : size(pressure, 2)
+    X_black_foam(i, 1) = pressure(2, i); % Pressure
+    X_black_foam(i, 2) = vibration(2, i); % Vibration
+    X_black_foam(i, 3) = temperature(2, i); % Temperature
+
+    X_car_sponge(i, 1) = pressure(3, i); % Pressure
+    X_car_sponge(i, 2) = vibration(3, i); % Vibration
+    X_car_sponge(i, 3) = temperature(3, i); % Temperature
+end
+
+
+% Standardization
+X_black_foam = (X_black_foam - mean(X_black_foam)) ./ std(X_black_foam);
+X_car_sponge = (X_car_sponge - mean(X_car_sponge)) ./ std(X_car_sponge);
+
+
+% Calculate Means
+mean_black_foam = mean(X_black_foam);
+mean_car_sponge = mean(X_car_sponge);
+overall_mean = mean([X_black_foam; X_car_sponge]);
+
+% Initialize the within-class scatter matrix
+S_W = zeros(3, 3);
+
+% Add scatter for each class
+for i = 1:size(X_black_foam, 1)
+    S_W = S_W + (X_black_foam(i,:) - mean_black_foam)' * (X_black_foam(i,:) - mean_black_foam);
+end
+for i = 1:size(X_car_sponge, 1)
+    S_W = S_W + (X_car_sponge(i,:) - mean_car_sponge)' * (X_car_sponge(i,:) - mean_car_sponge);
+end
+
+% Between-class scatter matrix
+S_B = (mean_black_foam - overall_mean)' * (mean_black_foam - overall_mean) + ...
+      (mean_car_sponge - overall_mean)' * (mean_car_sponge - overall_mean);
+
+% Solve the generalized eigenvalue problem
+[eigenvectors, eigenvalues] = eig(inv(S_W) * S_B);
+
+% Extract the diagonal of eigenvalues matrix
+eigenvalues = diag(eigenvalues);
+
+% Sort the eigenvalues and corresponding eigenvectors in descending order
+[~, sorted_indices] = sort(eigenvalues, 'descend');
+eigenvectors = eigenvectors(:, sorted_indices);
+
+% Select the top eigenvectors (in this case, you'll typically pick one)
+W = eigenvectors(:, 1);
+
+% Project the data
+Y_black_foam = X_black_foam * W;
+Y_car_sponge = X_car_sponge * W;
+
+figure;
+scatter(Y_black_foam, zeros(size(Y_black_foam)), 'b', 'filled');
+hold on;
+scatter(Y_car_sponge, zeros(size(Y_car_sponge)), 'r', 'filled');
+legend('Black Foam', 'Car Sponge');
+title('LDA Projected Data');
+xlabel('LDA Component');
+hold off;
+
