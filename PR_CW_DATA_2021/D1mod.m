@@ -1,4 +1,4 @@
-% when we use Manhattan distance
+%k-means clustering algorithm
 
 % Load the data from the .mat file
 data = load('Lab1/F0_PVT.mat');
@@ -34,12 +34,14 @@ centroids = data(randperm(numPoints, k), :);
 assignment = zeros(size(data,1),3);
 disp(size(assignment));
 
+
 for it = 1:maxIter
+    % Assign each datapoint to nearest centroid
     for i = 1:numPoints
         assign_j = -1;
         min_distance = inf;
         for j = 1:k
-            distance = sum(abs(data(i,:) - centroids(j,:))); % Manhattan distance
+            distance = sqrt(sum((data(i,:) - centroids(j,:)) .^ 2));
             if distance < min_distance
                 min_distance = distance;
                 assign_j = j;
@@ -69,25 +71,30 @@ disp(assignment);
 disp('Centroids:')
 disp(centroids)
 
+
+num_objects = 6;
+tests_per_object = 10;
+
+% Visualization - Clustered Data Colored by Cluster Assignment in 3D
 figure;
 hold on;
-colors = lines(k); % Generate k distinct colors
-for j = 1:k
+cluster_colors = lines(k); % Generate k distinct colors for each cluster
+
+for cluster_idx = 1:k
     % Select data points assigned to each cluster
-    cluster_points = data(assignment == j, :);
-    scatter3(cluster_points(:,1), cluster_points(:,2), cluster_points(:,3), 36, colors(j,:), 'filled');
+    cluster_points = data(assignment == cluster_idx, :);
+    
+    % 3D scatter plot for cluster points
+    scatter3(cluster_points(:,1), cluster_points(:,2), cluster_points(:,3), ...
+            36, cluster_colors(cluster_idx,:), 'filled', 'DisplayName', sprintf('Cluster %d', cluster_idx));
 end
+
 xlabel('Standardized Pressure');
 ylabel('Standardized Vibration');
 zlabel('Standardized Temperature');
-title('3D Cluster Assignments with Manhattan distance');
-legend(arrayfun(@(x) sprintf('Cluster %d', x), 1:k, 'UniformOutput', false));
-grid on; % Optional for a grid
-view(3); % Adjusts the view to 3D
+title('Clustered Data Colored by k-Means Assignment');
+legend;
+grid on; % Adds a grid to the plot for better visualization
+view(3); % Sets the default 3D view
 hold off;
-        
-        
-        
-        
-        
         

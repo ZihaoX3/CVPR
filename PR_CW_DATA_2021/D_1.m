@@ -77,14 +77,16 @@ colors = lines(k); % Generate k distinct colors
 for j = 1:k
     % Select data points assigned to each cluster
     cluster_points = data(assignment == j, :);
-    scatter(cluster_points(:,1), cluster_points(:,2), 36, colors(j,:), 'filled');
+    scatter3(cluster_points(:,1), cluster_points(:,2), cluster_points(:,3), 36, colors(j,:), 'filled');
 end
 xlabel('Standardized Pressure');
 ylabel('Standardized Vibration');
-title('Cluster Assignments with Euclidean distance');
+zlabel('Standardized Temperature');
+title('3D Cluster Assignments with Euclidean distance');
 legend(arrayfun(@(x) sprintf('Cluster %d', x), 1:k, 'UniformOutput', false));
+grid on; % Optional for a grid
+view(3); % Adjusts the view to 3D
 hold off;
-
         
         
         
