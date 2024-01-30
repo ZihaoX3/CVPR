@@ -58,4 +58,8 @@ for i = 1:size(projectedData, 1)
     scatter3(projectedData(i,1), projectedData(i,2), projectedData(i,3), 36, colors(i,:), 'filled');
 end
 hold off;
+title('Visualize the electrode data with 3 PC')
+xlabel('PC1')
+ylabel('PC2')
+zlabel('PC3')
 legend('Eigenvector 1', 'Eigenvector 2', 'Eigenvector 3', 'acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase');

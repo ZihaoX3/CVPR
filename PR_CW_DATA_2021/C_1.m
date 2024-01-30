@@ -71,6 +71,11 @@ end
 quiver(0,0,feature_vector(1),feature_vector(2));
 hold off;
 
+title('standardilzed Pressure vs Vibration')
+xlabel('p')
+ylabel('v')
+legend('blackfoam', 'carsponge')
+
 figure;
 hold on;
 for i = 1:size(X_black_foam, 1)
@@ -79,6 +84,12 @@ for i = 1:size(X_black_foam, 1)
 end
 quiver(0,0,feature_vector(1),feature_vector(3));
 hold off;
+
+title('Pressure vs Temperature')
+xlabel('p')
+ylabel('t')
+legend('blackfoam', 'carsponge')
+
 
 figure;
 hold on;
@@ -89,3 +100,7 @@ end
 quiver(0,0,feature_vector(2),feature_vector(3));
 hold off;
 
+title('Vibration vs Temperature')
+xlabel('v')
+ylabel('t')
+legend('blackfoam', 'carsponge')

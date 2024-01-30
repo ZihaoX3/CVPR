@@ -1,3 +1,5 @@
+%3D and 1D projection
+
 % Load the data from the .mat file
 data = load('Lab1/F0_PVT.mat');
 
@@ -62,6 +64,18 @@ W = eigenvectors(:, 1);
 % Project the data
 Y_black_foam = X_black_foam * W;
 Y_car_sponge = X_car_sponge * W;
+
+figure;
+scatter3(X_black_foam(:, 1), X_black_foam(:, 2), X_black_foam(:, 3), 'b', 'filled');
+hold on;
+scatter3(X_car_sponge(:, 1), X_car_sponge(:, 2), X_car_sponge(:, 3), 'r', 'filled');
+title('3D Scatter Plot of Black Foam and Car Sponge');
+xlabel('Pressure');
+ylabel('Vibration');
+zlabel('Temperature');
+legend('Black Foam', 'Car Sponge');
+grid on;
+
 
 figure;
 scatter(Y_black_foam, zeros(size(Y_black_foam)), 'b', 'filled');

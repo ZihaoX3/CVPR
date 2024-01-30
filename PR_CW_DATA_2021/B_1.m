@@ -97,6 +97,9 @@ for i = 1:size(projectedData, 1)
     plot(projectedData(i, 1), projectedData(i, 2), '.');
 end
 hold off;
+title('Reduced to 2D');
+xlabel('PC1')
+ylabel('PC2')
 
 %question d
 figure;
