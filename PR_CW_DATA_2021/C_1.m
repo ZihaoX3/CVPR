@@ -64,17 +64,19 @@ disp(feature_vector);
 
 figure;
 hold on;
+quiver(0,0,feature_vector(1),feature_vector(2));
 for i = 1:size(X_black_foam, 1)
     plot(X_black_foam(i, 1), X_black_foam(i, 2), 'b.');
     plot(X_car_sponge(i, 1), X_car_sponge(i, 2), 'r.');
 end
-quiver(0,0,feature_vector(1),feature_vector(2));
+
 hold off;
 
 title('standardilzed Pressure vs Vibration')
 xlabel('p')
 ylabel('v')
-legend('blackfoam', 'carsponge')
+legend()
+legend('LDA function','blackfoam', 'carsponge')
 
 figure;
 hold on;
@@ -88,7 +90,8 @@ hold off;
 title('Pressure vs Temperature')
 xlabel('p')
 ylabel('t')
-legend('blackfoam', 'carsponge')
+legend()
+legend('LDA function','blackfoam', 'carsponge')
 
 
 figure;
@@ -103,4 +106,5 @@ hold off;
 title('Vibration vs Temperature')
 xlabel('v')
 ylabel('t')
-legend('blackfoam', 'carsponge')
+legend()
+legend('LDA function','blackfoam', 'carsponge')

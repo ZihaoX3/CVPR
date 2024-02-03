@@ -57,16 +57,11 @@ projectedData = standardizedData * F;
 disp('projected data');
 disp(projectedData);
 
-
-% Define the directory and filename
-targetDirectory = 'Lab1';
-
-% Check if the directory exists, and if not, create it
-if ~exist(targetDirectory, 'dir')
-    mkdir(targetDirectory);
-end
-
-% Define the full path to the file
-Electrode_PCA = fullfile(targetDirectory, 'Electrode_PCA.mat');
-save(Electrode_PCA,'projectedData');
-
+% 3D scatter plot of projected data
+figure;
+scatter3(projectedData(:,1), projectedData(:,2), projectedData(:,3), 'filled');
+title('3D Scatter Plot of Electrode Data on First Three PCs');
+xlabel('PC1');
+ylabel('PC2');
+zlabel('PC3');
+grid on;

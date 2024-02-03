@@ -2,35 +2,38 @@
 % Load the data from the .mat file
 data = load('Lab1/F0_PVT.mat');
 colors = lines(6);
+
+
 % Extract the individual variables
 pressure = data.Pressure;
 temperature = data.Temperature;
 vibration = data.Vibration;
+
 
 % Standardize the data
 pressure_standardized = (pressure - mean(pressure)) ./ std(pressure);
 temperature_standardized = (temperature - mean(temperature)) ./ std(temperature);
 vibration_standardized = (vibration - mean(vibration)) ./ std(vibration);
 
+
+% Combine the variables into a single matrix for covariance calculation
+% Each column of this matrix represents a variable
 pressure_vector = pressure_standardized(:);
 temperature_vector = temperature_standardized(:);
 vibration_vector = vibration_standardized(:);
-% Combine the variables into a single matrix for covariance calculation
-% Each column of this matrix represents a variable
 combinedData = [pressure_vector, temperature_vector, vibration_vector];
+disp(size(combinedData))
 
 
 % Calculate the covariance matrix
 covarianceMatrix = cov(combinedData);
 
 % Display the covariance matrix
+disp('Covariance Matrix:');
 disp(covarianceMatrix);
 
 % Calculate eigenvalues and eigenvectors
 [eigenvectors, eigenvalues] = eig(covarianceMatrix);
-
-% eigenvalues are on the diagonal of the eigenvalues matrix
-% eigenvalues = diag(eigenvalues);
 
 % Display the results
 disp('Eigenvalues:');
@@ -54,12 +57,12 @@ for i = 1:size(pressure_standardized, 1)
 end
 hold off;
 
-% Setting the plot limits
+% Setting the plot
 axis equal;
 xlabel('Pressure');
 ylabel('Vibration');
 zlabel('Temperature');
-title('3D Scatter Plot of PVT Data');
+title('3D Scatter Plot of PVT Data with PCs');
 grid on;
 legend();
 
@@ -85,8 +88,7 @@ disp(largest_eigenvalues);
 disp('Projection Matrix:');
 disp(F);
 
-
-% question c
+% Project the data on principal components
 projectedData = combinedData * F;
 disp('Projected Data:');
 disp(projectedData);
@@ -97,12 +99,16 @@ for i = 1:size(projectedData, 1)
     plot(projectedData(i, 1), projectedData(i, 2), '.');
 end
 hold off;
-title('Reduced to 2D');
+title('2D PVT Data projected on PCs');
 xlabel('PC1')
 ylabel('PC2')
+legend('acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase');
+
+
 
 %question d
 figure;
+hold on;
 
 % Number of principal components
 numPCs = size(projectedData, 2);
@@ -112,6 +118,8 @@ for i = 1:numPCs
     % Create a subplot for each principal component
     subplot(numPCs, 1, i); 
     scatter(projectedData(:,i), zeros(size(projectedData,1), 1), 'filled');
+    title("Distributed PVT DATA across PC"+i)
     % Label y-axis as the current principal component
     ylabel(['PC' num2str(i)]);
 end
+hold off;

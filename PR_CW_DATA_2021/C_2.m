@@ -57,6 +57,7 @@ eigenvalues = diag(eigenvalues);
 % Sort the eigenvalues and corresponding eigenvectors in descending order
 [~, sorted_indices] = sort(eigenvalues, 'descend');
 eigenvectors = eigenvectors(:, sorted_indices);
+disp(eigenvalues)
 
 % Select the top eigenvectors (in this case, you'll typically pick one)
 W = eigenvectors(:, 1);
@@ -64,18 +65,25 @@ W = eigenvectors(:, 1);
 % Project the data
 Y_black_foam = X_black_foam * W;
 Y_car_sponge = X_car_sponge * W;
-
+% 3D Scatter Plot
 figure;
 scatter3(X_black_foam(:, 1), X_black_foam(:, 2), X_black_foam(:, 3), 'b', 'filled');
 hold on;
 scatter3(X_car_sponge(:, 1), X_car_sponge(:, 2), X_car_sponge(:, 3), 'r', 'filled');
-title('3D Scatter Plot of Black Foam and Car Sponge');
+% Add hyperplane (for simplicity, using the first LD)
+% Define a grid for the hyperplane
+[xGrid, yGrid] = meshgrid(linspace(min(X_black_foam(:,1)), max(X_black_foam(:,1)), 10), ...
+                          linspace(min(X_black_foam(:,2)), max(X_black_foam(:,2)), 10));
+% Calculate z values on the grid
+zGrid = -(W(1)/W(3) * xGrid + W(2)/W(3) * yGrid);
+surf(xGrid, yGrid, zGrid, 'FaceColor', 'green', 'FaceAlpha', 0.5);
+title('3D Scatter Plot with LDA Hyperplane');
 xlabel('Pressure');
 ylabel('Vibration');
 zlabel('Temperature');
-legend('Black Foam', 'Car Sponge');
+legend('Black Foam', 'Car Sponge', 'LDA Hyperplane');
 grid on;
-
+hold off;
 
 figure;
 scatter(Y_black_foam, zeros(size(Y_black_foam)), 'b', 'filled');
@@ -85,4 +93,3 @@ legend('Black Foam', 'Car Sponge');
 title('LDA Projected Data');
 xlabel('LDA Component');
 hold off;
-

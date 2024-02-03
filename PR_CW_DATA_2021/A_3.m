@@ -1,7 +1,13 @@
 % Load the data
-load('F0_PVT.mat');
+load('Lab1/F0_PVT.mat');
 
 % Create a colormap with as many colors as you have objects
+% acrylic: dark blue
+% black foam: red
+% car sponge: yellow
+% flour sack: purple
+% kitchen sponge: green
+% steel vase: light blue
 colors = lines(6);
 
 % Create a new figure
