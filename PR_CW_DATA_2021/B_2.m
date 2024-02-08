@@ -70,3 +70,31 @@ end
 Electrode_PCA = fullfile(targetDirectory, 'Electrode_PCA.mat');
 save(Electrode_PCA,'projectedData');
 
+% Assuming projectedData is [60 x 3], with each set of 10 observations corresponding to a different object
+
+% Create a new figure
+figure;
+hold on;
+
+% Define colors
+colors = lines(6);
+
+% Loop over each set of 10 observations to plot them with a unique color
+for i = 1:6
+    % Calculate the index range for the current object
+    idxRange = (1:10) + (i-1)*10;
+    
+    % Plot the data points for the current object
+    scatter3(projectedData(idxRange,1), projectedData(idxRange,2), projectedData(idxRange,3), 36, colors(i,:), 'filled');
+end
+
+hold off;
+
+% Label the axes
+xlabel('Principal Component 1');
+ylabel('Principal Component 2');
+zlabel('Principal Component 3');
+title('3D Visualization of Electrode Data on Principal Components');
+grid on;
+legend('acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase');
+view(3);
