@@ -80,11 +80,12 @@ legend('LDA function','blackfoam', 'carsponge')
 
 figure;
 hold on;
+quiver(0,0,feature_vector(1),feature_vector(3));
 for i = 1:size(X_black_foam, 1)
     plot(X_black_foam(i, 1), X_black_foam(i, 3), 'b.');
     plot(X_car_sponge(i, 1), X_car_sponge(i, 3), 'r.');
 end
-quiver(0,0,feature_vector(1),feature_vector(3));
+
 hold off;
 
 title('Pressure vs Temperature')
@@ -96,11 +97,12 @@ legend('LDA function','blackfoam', 'carsponge')
 
 figure;
 hold on;
+quiver(0,0,feature_vector(2),feature_vector(3));
 for i = 1:size(X_black_foam, 1)
     plot(X_black_foam(i, 2), X_black_foam(i, 3), 'b.');
     plot(X_car_sponge(i, 2), X_car_sponge(i, 3), 'r.');
 end
-quiver(0,0,feature_vector(2),feature_vector(3));
+
 hold off;
 
 title('Vibration vs Temperature')
