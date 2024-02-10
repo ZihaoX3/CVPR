@@ -12,7 +12,7 @@ Electrodes = zeros(6,10,num_electrode);
 data_files = dir('*.mat');
 
 %Define time instance
-time = 250;
+time = 50;
 
 %Iterate all data files to store values
 for i = 1:length(data_files)
