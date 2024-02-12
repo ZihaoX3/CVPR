@@ -59,7 +59,7 @@ eigenvalues = diag(eigenvalues);
 eigenvectors = eigenvectors(:, sorted_indices);
 disp(eigenvalues)
 
-% Select the top eigenvectors (in this case, you'll typically pick one)
+% Select the top eigenvectors
 W = eigenvectors(:, 1);
 
 % Project the data

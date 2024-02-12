@@ -1,96 +1,60 @@
-%3D and 1D projection
-
-% Load the data from the .mat file
+% black foam vs kitchen sponge
 data = load('Lab1/F0_PVT.mat');
 
-pressure = data.Pressure;
-temperature = data.Temperature;
-vibration = data.Vibration;
+pressure_black_foam = data.Pressure(2,:)';
+vibration_black_foam = data.Vibration(2,:)';
+temperature_black_foam = data.Temperature(2,:)';
 
-% Initialize matrices with three columns for Pressure, Vibration, and Temperature
-X_black_foam = zeros(size(pressure, 2), 3);
-X_acrylic = zeros(size(pressure, 2), 3);
+pressure_kitchen_sponge = data.Pressure(5,:)';
+vibration_kitchen_sponge = data.Vibration(5,:)';
+temperature_kitchen_sponge = data.Temperature(5,:)';
 
-% Extract data for black foam and acrylic sponge
-for i = 1 : size(pressure, 2)
-    X_acrylic(i, 1) = pressure(6, i); % Pressure
-    X_acrylic(i, 2) = vibration(6, i); % Vibration
-    X_acrylic(i, 3) = temperature(6, i); % Temperature
+X_pv = [pressure_black_foam vibration_black_foam; pressure_kitchen_sponge vibration_kitchen_sponge];
+X_pt = [pressure_black_foam temperature_black_foam; pressure_kitchen_sponge temperature_kitchen_sponge];
+X_vt = [vibration_black_foam temperature_black_foam; vibration_kitchen_sponge temperature_kitchen_sponge];
+
+% Create label vectors for the classes
+labels_pv = [ones(size(pressure_black_foam)); 2 * ones(size(pressure_kitchen_sponge))];
+labels_pt = labels_pv;  % Same labels for all, since the class division is the same
+labels_vt = labels_pv;
+
+% Perform LDA and plot for each feature pair
+feature_pairs = {X_pv, X_pt, X_vt};
+pair_names = {'Pressure vs Vibration', 'Pressure vs Temperature', 'Vibration vs Temperature'};
+labels = {labels_pv, labels_pt, labels_vt};
+
+for i = 1:length(feature_pairs)
+    % Standardize the data for the current pair
+    X_std = (feature_pairs{i} - mean(feature_pairs{i})) ./ std(feature_pairs{i});
     
-    X_black_foam(i, 1) = pressure(4, i); % Pressure
-    X_black_foam(i, 2) = vibration(4, i); % Vibration
-    X_black_foam(i, 3) = temperature(4, i); % Temperature
-
+    % Calculate the means for each class for the current feature pair
+    mean_class1 = mean(X_std(labels{i} == 1,:));
+    mean_class2 = mean(X_std(labels{i} == 2,:));
+    
+    % Compute the within-class scatter matrix
+    S_W = cov(X_std(labels{i} == 1,:)) + cov(X_std(labels{i} == 2,:));
+    
+    % Compute the between-class scatter matrix
+    mean_diff = mean_class1 - mean_class2;
+    S_B = (mean_diff' * mean_diff) * sum(labels{i} == 1); % Use the number of observations in class 1
+    
+    % Solve the generalized eigenvalue problem
+    [V, D] = eig(S_B, S_W);
+    [~, ind] = sort(diag(D), 'descend');
+    W = V(:,ind(1)); % Select the eigenvector with the largest eigenvalue
+    
+    % Project the data onto the LDA component
+    Y_class1 = X_std(labels{i} == 1,:) * W;
+    Y_class2 = X_std(labels{i} == 2,:) * W;
+    
+    % Plot the LDA projection for the current feature pair
+    figure;
+    scatter(Y_class1, zeros(size(Y_class1, 1), 1), 'b', 'filled');
+    hold on;
+    scatter(Y_class2, zeros(size(Y_class2, 1), 1), 'r', 'filled');
+    title(['LDA Projection for ', pair_names{i}]);
+    xlabel('LDA Component');
+    ylabel(''); % No y-axis label needed as this is a 1D plot
+    legend('Black Foam', 'Kitchen Sponge');
+    hold off;
 end
-
-
-% Standardization
-X_black_foam = (X_black_foam - mean(X_black_foam)) ./ std(X_black_foam);
-X_acrylic = (X_acrylic - mean(X_acrylic)) ./ std(X_acrylic);
-
-
-% Calculate Means
-mean_black_foam = mean(X_black_foam);
-mean_acrylic = mean(X_acrylic);
-overall_mean = mean([X_black_foam; X_acrylic]);
-
-% Initialize the within-class scatter matrix
-S_W = zeros(3, 3);
-
-% Add scatter for each class
-for i = 1:size(X_black_foam, 1)
-    S_W = S_W + (X_black_foam(i,:) - mean_black_foam)' * (X_black_foam(i,:) - mean_black_foam);
-end
-for i = 1:size(X_acrylic, 1)
-    S_W = S_W + (X_acrylic(i,:) - mean_acrylic)' * (X_acrylic(i,:) - mean_acrylic);
-end
-
-% Between-class scatter matrix
-S_B = (mean_black_foam - overall_mean)' * (mean_black_foam - overall_mean) + ...
-      (mean_acrylic - overall_mean)' * (mean_acrylic - overall_mean);
-
-% Solve the generalized eigenvalue problem
-[eigenvectors, eigenvalues] = eig(inv(S_W) * S_B);
-
-% Extract the diagonal of eigenvalues matrix
-eigenvalues = diag(eigenvalues);
-
-% Sort the eigenvalues and corresponding eigenvectors in descending order
-[~, sorted_indices] = sort(eigenvalues, 'descend');
-eigenvectors = eigenvectors(:, sorted_indices);
-disp(eigenvalues)
-
-% Select the top eigenvectors (in this case, you'll typically pick one)
-W = eigenvectors(:, 1);
-
-% Project the data
-Y_black_foam = X_black_foam * W;
-Y_acrylic = X_acrylic * W;
-% 3D Scatter Plot
-figure;
-scatter3(X_black_foam(:, 1), X_black_foam(:, 2), X_black_foam(:, 3), 'b', 'filled');
-hold on;
-scatter3(X_acrylic(:, 1), X_acrylic(:, 2), X_acrylic(:, 3), 'r', 'filled');
-% Add hyperplane (for simplicity, using the first LD)
-% Define a grid for the hyperplane
-[xGrid, yGrid] = meshgrid(linspace(min(X_black_foam(:,1)), max(X_black_foam(:,1)), 10), ...
-                          linspace(min(X_black_foam(:,2)), max(X_black_foam(:,2)), 10));
-% Calculate z values on the grid
-zGrid = -(W(1)/W(3) * xGrid + W(2)/W(3) * yGrid);
-surf(xGrid, yGrid, zGrid, 'FaceColor', 'green', 'FaceAlpha', 0.5);
-title('3D Scatter Plot with LDA Hyperplane');
-xlabel('Pressure');
-ylabel('Vibration');
-zlabel('Temperature');
-legend('Black Foam', 'Acrylic', 'LDA Hyperplane');
-grid on;
-hold off;
-
-figure;
-scatter(Y_black_foam, zeros(size(Y_black_foam)), 'b', 'filled');
-hold on;
-scatter(Y_acrylic, zeros(size(Y_acrylic)), 'r', 'filled');
-legend('Black Foam', 'Acrylic');
-title('LDA Projected Data');
-xlabel('LDA Component');
-hold off;
