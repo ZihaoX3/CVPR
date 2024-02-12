@@ -85,6 +85,26 @@ legend('Black Foam', 'Car Sponge', 'LDA Hyperplane');
 grid on;
 hold off;
 
+% Select the top two eigenvectors for 2D projection
+W_2D = eigenvectors(:, 1:2);
+
+% Project the data onto the 2D subspace
+Y_black_foam_2D = X_black_foam * W_2D;
+Y_car_sponge_2D = X_car_sponge * W_2D;
+
+% Visualization for 2D projection
+figure;
+scatter(Y_black_foam_2D(:, 1), Y_black_foam_2D(:, 2), 'b', 'filled');
+hold on;
+scatter(Y_car_sponge_2D(:, 1), Y_car_sponge_2D(:, 2), 'r', 'filled');
+legend('Black Foam', 'Car Sponge');
+title('LDA Projected Data (2D)');
+xlabel('LDA1');
+ylabel('LDA2');
+grid on;
+hold off;
+
+
 figure;
 scatter(Y_black_foam, zeros(size(Y_black_foam)), 'b', 'filled');
 hold on;
