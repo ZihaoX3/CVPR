@@ -9,20 +9,15 @@ pressure = data.Pressure;
 temperature = data.Temperature;
 vibration = data.Vibration;
 
+combinedData = [pressure(1,:),pressure(2,:),pressure(3,:),pressure(4,:),pressure(5,:),pressure(6,:);
+    vibration(1,:),vibration(2,:),vibration(3,:),vibration(4,:),vibration(5,:),vibration(6,:);
+    temperature(1,:),temperature(2,:),temperature(3,:),temperature(4,:),temperature(5,:),temperature(6,:);];
+
+Test = combinedData;
 
 % Standardize the data
-pressure_standardized = (pressure - mean(pressure)) ./ std(pressure);
-temperature_standardized = (temperature - mean(temperature)) ./ std(temperature);
-vibration_standardized = (vibration - mean(vibration)) ./ std(vibration);
+combinedData = zscore(Test');
 
-
-% Combine the variables into a single matrix for covariance calculation
-% Each column of this matrix represents a variable
-pressure_vector = pressure_standardized(:);
-temperature_vector = temperature_standardized(:);
-vibration_vector = vibration_standardized(:);
-combinedData = [pressure_vector, temperature_vector, vibration_vector];
-disp(size(combinedData))
 
 
 % Calculate the covariance matrix
@@ -52,8 +47,10 @@ quiver3(origin(1), origin(2), origin(3), eigenvectors(1,1), eigenvectors(2,1), e
 hold on;
 quiver3(origin(1), origin(2), origin(3), eigenvectors(1,2), eigenvectors(2,2), eigenvectors(3,2), 'g');
 quiver3(origin(1), origin(2), origin(3), eigenvectors(1,3), eigenvectors(2,3), eigenvectors(3,3), 'b');
-for i = 1:size(pressure_standardized, 1)
-    scatter3(pressure_standardized(i,:), vibration_standardized(i,:), temperature_standardized(i,:), 36, colors(i,:), 'filled');
+
+
+for i = 1:6
+    scatter3(combinedData((i-1)*10+(1:10),1), combinedData((i-1)*10+(1:10),2), combinedData((i-1)*10+(1:10),3), 36, colors(i,:), 'filled');
 end
 hold off;
 
@@ -90,14 +87,16 @@ disp(F);
 
 % Project the data on principal components
 projectedData = combinedData * F;
-disp('Projected Data:');
-disp(projectedData);
+% disp('Projected Data:');
+% disp(projectedData);
+
 
 figure;
 hold on;
-for i = 1:size(projectedData, 1)
-    plot(projectedData(i, 1), projectedData(i, 2), '.');
+for i = 1:6
+    scatter(projectedData((i-1)*10+(1:10),1),projectedData((i-1)*10+(1:10),2), 36, colors(i,:), "filled");
 end
+
 hold off;
 title('2D PVT Data projected on PCs');
 xlabel('PC1')
@@ -105,6 +104,9 @@ ylabel('PC2')
 legend('acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase');
 
 
+
+F = eigenvectors(:, sort_index(1:3));
+projectedData = combinedData * F;
 
 %question d
 figure;
@@ -121,5 +123,6 @@ for i = 1:numPCs
     title("Distributed PVT DATA across PC"+i)
     % Label y-axis as the current principal component
     ylabel(['PC' num2str(i)]);
+    xlim([-4 4]);
 end
 hold off;
