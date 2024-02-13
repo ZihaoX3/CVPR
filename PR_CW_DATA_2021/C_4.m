@@ -1,20 +1,20 @@
-% black foam vs kitchen sponge
+% flour sack vs steel vase
 data = load('Lab1/F0_PVT.mat');
 
-pressure_black_foam = data.Pressure(2,:)';
-vibration_black_foam = data.Vibration(2,:)';
-temperature_black_foam = data.Temperature(2,:)';
+pressure_flour_sack = data.Pressure(4,:)';
+vibration_flour_sack = data.Vibration(4,:)';
+temperature_flour_sack = data.Temperature(4,:)';
 
-pressure_kitchen_sponge = data.Pressure(5,:)';
-vibration_kitchen_sponge = data.Vibration(5,:)';
-temperature_kitchen_sponge = data.Temperature(5,:)';
+pressure_steel_vase = data.Pressure(6,:)';
+vibration_steel_vase = data.Vibration(6,:)';
+temperature_steel_vase = data.Temperature(6,:)';
 
-X_pv = [pressure_black_foam vibration_black_foam; pressure_kitchen_sponge vibration_kitchen_sponge];
-X_pt = [pressure_black_foam temperature_black_foam; pressure_kitchen_sponge temperature_kitchen_sponge];
-X_vt = [vibration_black_foam temperature_black_foam; vibration_kitchen_sponge temperature_kitchen_sponge];
+X_pv = [pressure_flour_sack vibration_flour_sack; pressure_steel_vase vibration_steel_vase];
+X_pt = [pressure_flour_sack temperature_flour_sack; pressure_steel_vase temperature_steel_vase];
+X_vt = [vibration_flour_sack temperature_flour_sack; vibration_steel_vase temperature_steel_vase];
 
 % Create label vectors for the classes
-labels_pv = [ones(size(pressure_black_foam)); 2 * ones(size(pressure_kitchen_sponge))];
+labels_pv = [ones(size(pressure_flour_sack)); 2 * ones(size(pressure_steel_vase))];
 labels_pt = labels_pv;  % Same labels for all, since the class division is the same
 labels_vt = labels_pv;
 
@@ -55,6 +55,6 @@ for i = 1:length(feature_pairs)
     title(['LDA Projection for ', pair_names{i}]);
     xlabel('LDA Component');
     ylabel(''); % No y-axis label needed as this is a 1D plot
-    legend('Black Foam', 'Kitchen Sponge');
+    legend('Flour sack', 'Steel Vase');
     hold off;
 end
