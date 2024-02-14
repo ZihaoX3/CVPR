@@ -1,5 +1,6 @@
 # PRcw
 This is the pattern recognition part of coursework of Imperial College London EE module ELEC70073 - Computer Vision and Pattern Recognition 2023-2024, by Zihao and Yunan. 
+//
 For section A in CW layout:
 File name: sectionA_1.m (section A: question 1) sectionA_2.m (section A: question 2) sectionA_3.m (section A: question 3) F0_PVT.mat (section A: question 2, storing the data of PVT at t = 800) F0_ELEC.mat (section A: question 2, storing the data of electrodes at t = 800) 
 
