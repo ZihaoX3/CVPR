@@ -3,7 +3,8 @@ This is the pattern recognition part of coursework of Imperial College London EE
 
 
 **For section A in CW layout:**   
-File name: sectionA_1.m (section A: question 1) sectionA_2.m (section A: question 2) sectionA_3.m (section A: question 3) F0_PVT.mat (section A: question 2, storing the data of PVT at t = 800) F0_ELEC.mat (section A: question 2, storing the data of electrodes at t = 50)   
+File name:   
+sectionA_1.m (section A: question 1) sectionA_2.m (section A: question 2) sectionA_3.m (section A: question 3) F0_PVT.mat (section A: question 2, storing the data of PVT at t = 800) F0_ELEC.mat (section A: question 2, storing the data of electrodes at t = 50)   
 
 For section B in CW layout:  
 File name: sectionB_1.m (section B: question1) sectionB_2.m (section B: question2) 
