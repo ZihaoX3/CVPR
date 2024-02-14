@@ -1,4 +1,6 @@
-% load PCA processed Electrode data
+% Bagging algorithm
+
+% Load PCA processed Electrode data
 Electrode_PCA = load('Lab1/Electrode_PCA.mat');
 Electrode_PCA = Electrode_PCA.projectedData;
 
@@ -7,6 +9,7 @@ for i = 1:size(Electrode_PCA,1)
     full_data(i).y = floor((i-1)/10) + 1;
 end
 
+% Fetch training and testing data
 train_num = size(Electrode_PCA,1) * 0.6;
 rand_indices = randperm(size(Electrode_PCA,1));
 train_indices = rand_indices(1:train_num);

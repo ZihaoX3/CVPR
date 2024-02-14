@@ -1,4 +1,4 @@
-%3D and 1D projection
+% LDA to the 3D PVT data
 
 % Load the data from the .mat file
 data = load('Lab1/F0_PVT.mat');
@@ -64,6 +64,8 @@ W = eigenvectors(:, 1);
 % Project the data
 Y_black_foam = X_black_foam * W;
 Y_car_sponge = X_car_sponge * W;
+
+
 % 3D Scatter Plot
 figure;
 scatter3(X_black_foam(:, 1), X_black_foam(:, 2), X_black_foam(:, 3), 'b', 'filled');

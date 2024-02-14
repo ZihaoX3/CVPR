@@ -35,13 +35,15 @@ for i = 1:length(feature_pairs)
     S_W = cov(X_std(labels{i} == 1,:)) + cov(X_std(labels{i} == 2,:));
     
     % Compute the between-class scatter matrix
-    mean_diff = mean_class1 - mean_class2;
-    S_B = (mean_diff' * mean_diff) * sum(labels{i} == 1); % Use the number of observations in class 1
-    
+    S_B = (mean_class1 - mean_class2)' * (mean_class1 - mean_class2);
+
+
     % Solve the generalized eigenvalue problem
-    [V, D] = eig(S_B, S_W);
-    [~, ind] = sort(diag(D), 'descend');
-    W = V(:,ind(1)); % Select the eigenvector with the largest eigenvalue
+    S = inv(S_W) * S_B;
+    [eigenvectors, eigenvalues] = eig(S);
+    eigenvalues = diag(eigenvalues);
+    [sorted_eigenvalues, sort_index] = sort(eigenvalues, 'descend');
+    W = eigenvectors(:, sort_index(1));
     
     % Project the data onto the LDA component
     Y_class1 = X_std(labels{i} == 1,:) * W;

@@ -1,4 +1,4 @@
-% B_1: PCA for PVT
+% B_1: PCA
 
 % question_a: Calculate cov matrix, eigenvalues and eigenvectors
 % Load the data from the .mat file
@@ -63,8 +63,10 @@ legend('Eigenvector 1', 'Eigenvector 2', 'Eigenvector 3', 'acrylic', 'black foam
 
 
 % question_c:  Reduce data to 2-D
-% Sort the eigenvalues in descending order and get indices
+
+#
 eigenvalues = diag(eigenvalues);
+% Sort the eigenvalues in descending order and get indices
 [sorted_eigenvalues, sort_index] = sort(eigenvalues, 'descend');
 
 % Extract the two largest eigenvalues
@@ -81,6 +83,9 @@ disp(F);
 
 % Project the data on principal components
 projectedData = combinedData * F;
+% disp('Projected Data:');
+% disp(projectedData);
+
 
 figure;
 hold on;
@@ -95,12 +100,14 @@ ylabel('PC2')
 legend('acrylic', 'black foam', 'car sponge', 'flour sack', 'kitchen sponge', 'steel vase');
 
 
-% question d: How data is distributed across all PCs
+
 F = eigenvectors(:, sort_index(1:3));
 projectedData = combinedData * F;
 
+%question d
 figure;
 hold on;
+
 % Number of principal components
 numPCs = size(projectedData, 2);
 

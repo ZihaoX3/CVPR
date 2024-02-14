@@ -1,4 +1,4 @@
-%k-means clustering algorithm
+% D_1: k-means clustering algorithm using Euclidean distance
 
 % Load the data from the .mat file
 data = load('Lab1/F0_PVT.mat');

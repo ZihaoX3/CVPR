@@ -1,4 +1,4 @@
-% when we use Manhattan distance
+% D_1_2: k-means using Manhattan distance
 
 % Load the data from the .mat file
 data = load('Lab1/F0_PVT.mat');

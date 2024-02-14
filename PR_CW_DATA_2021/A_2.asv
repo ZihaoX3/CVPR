@@ -5,21 +5,23 @@
 Pressure = zeros(6,10);
 Vibration = zeros(6,10);
 Temperature = zeros(6,10);
-% Electrode has 19 nodes, so it is 3-D
+% Electrode ha
 num_electrode = 19;
 Electrodes = zeros(6,10,num_electrode);
 
-% Refer to all data files
+
+%Refer to all data files
 data_files = dir('*.mat');
 
-% Define time instance
+%Define time instance
 time = 50;
 
 %Iterate all data files to store values
 for i = 1:length(data_files)
     filename = data_files(i).name;
     loadedData = load(filename);
-    %Calculate row and column index to make sure the values are stored in the 6*10 matrix
+    %Calculate row and column index to make sure the values are stored in
+    %the 6*10 matrix
     row_index = fix((i-1)/10);
     column_index = mod(i-1,10);
     %Store F0 Pressure Measurement

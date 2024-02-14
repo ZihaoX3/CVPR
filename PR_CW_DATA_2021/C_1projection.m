@@ -1,3 +1,5 @@
+% C_1_projection: PVT data projected on the LDA function
+
 data = load('Lab1/F0_PVT.mat');
 
 pressure_black_foam = data.Pressure(2,:)';
@@ -26,25 +28,32 @@ for i = 1:length(feature_pairs)
     % Standardize the data for the current pair
     X_std = (feature_pairs{i} - mean(feature_pairs{i})) ./ std(feature_pairs{i});
     
+    
     % Calculate the means for each class for the current feature pair
     mean_class1 = mean(X_std(labels{i} == 1,:));
     mean_class2 = mean(X_std(labels{i} == 2,:));
     
+    
     % Compute the within-class scatter matrix
     S_W = cov(X_std(labels{i} == 1,:)) + cov(X_std(labels{i} == 2,:));
     
-    % Compute the between-class scatter matrix
-    mean_diff = mean_class1 - mean_class2;
-    S_B = (mean_diff' * mean_diff) * sum(labels{i} == 1); % Use the number of observations in class 1
     
+    % Compute the between-class scatter matrix
+    S_B = (mean_class1 - mean_class2)' * (mean_class1 - mean_class2);
+
+
     % Solve the generalized eigenvalue problem
-    [V, D] = eig(S_B, S_W);
-    [~, ind] = sort(diag(D), 'descend');
-    W = V(:,ind(1)); % Select the eigenvector with the largest eigenvalue
+    S = inv(S_W) * S_B;
+    [eigenvectors, eigenvalues] = eig(S);
+    eigenvalues = diag(eigenvalues);
+    [sorted_eigenvalues, sort_index] = sort(eigenvalues, 'descend');
+    W = eigenvectors(:, sort_index(1));
+
     
     % Project the data onto the LDA component
     Y_class1 = X_std(labels{i} == 1,:) * W;
     Y_class2 = X_std(labels{i} == 2,:) * W;
+    
     
     % Plot the LDA projection for the current feature pair
     figure;
@@ -57,6 +66,3 @@ for i = 1:length(feature_pairs)
     legend('Black Foam', 'Car Sponge');
     hold off;
 end
-
-%COMMENT ON RESULT, FOR TEMPERATURE AND VIRB the car and black are not easy
-%to seperated

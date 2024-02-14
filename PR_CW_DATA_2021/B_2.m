@@ -1,7 +1,10 @@
+% B_2: PCA for Electrode
+
 % Load the data from the .mat file
 data = load('Lab1/F0_Electrodes.mat');
 colors = lines(6);
 
+% Fetch electrode data
 Electrodes = data.Electrodes;
 electrodes = zeros(60,19);
 
@@ -12,7 +15,6 @@ for i = 1:size(Electrodes,1)
         count = count+1; 
     end
 end
-
 
 % Standardize data
 standardizedData = (electrodes - mean(electrodes)) ./ std(electrodes);
@@ -30,6 +32,7 @@ format short;
 [sorted_eigenvalues, sort_index] = sort(eigenvalues, 'descend');
 disp(sorted_eigenvalues);
 
+
 % Scree plot
 pc_numbers = 1:length(eigenvalues);
 plot(pc_numbers, sorted_eigenvalues, 'o-k', 'MarkerFaceColor', 'k');
@@ -38,13 +41,14 @@ ylabel('Eigenvalue(Variance)');
 title('Variances of each PC');
 
 
- 
 % Extract the three largest eigenvalues
 largest_eigenvalues = sorted_eigenvalues(1:3);
  
+
 % Extract the eigenvectors corresponding to the three largest eigenvalues
 F = eigenvectors(:, sort_index(1:3));
  
+
 % Display the results
 disp('Three Largest Eigenvalues:');
 disp(largest_eigenvalues);
@@ -60,6 +64,7 @@ disp(projectedData);
 
 % Define the directory and filename
 targetDirectory = 'Lab1';
+
 
 % Check if the directory exists, and if not, create it
 if ~exist(targetDirectory, 'dir')
@@ -83,7 +88,6 @@ colors = lines(6);
 for i = 1:6
     % Calculate the index range for the current object
     idxRange = (1:10) + (i-1)*10;
-    
     % Plot the data points for the current object
     scatter3(projectedData(idxRange,1), projectedData(idxRange,2), projectedData(idxRange,3), 36, colors(i,:), 'filled');
 end

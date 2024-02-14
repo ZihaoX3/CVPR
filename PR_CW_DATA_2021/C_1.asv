@@ -1,4 +1,4 @@
-% C_1: LDA for PVT of black foam and car sponge
+
 
 % Load the data from the .mat file
 data = load('Lab1/F0_PVT.mat');
@@ -28,12 +28,12 @@ X_black_foam = (X_black_foam - mean(X_black_foam)) ./ std(X_black_foam);
 X_car_sponge = (X_car_sponge - mean(X_car_sponge)) ./ std(X_car_sponge);
 
 
+
 mean_black_foam = mean(X_black_foam);
 mean_car_sponge = mean(X_car_sponge);
 
 % Initialize the within-class scatter matrix S_W
 S_W = zeros(3, 3);
-
 
 % Calculate S_W
 for i = 1 : size(X_black_foam, 1)
@@ -47,21 +47,15 @@ for i = 1 : size(pressure,2)
     S_W = S_W + (X_car_sponge(i,:) - mean(X_car_sponge))' * (X_car_sponge(i,:) - mean(X_car_sponge));
 end
 
-
-% Calculate the between-class scatter matrix S_B
 S_B = (mean(X_black_foam) - mean(X_car_sponge))' * (mean(X_black_foam) - mean(X_car_sponge));
 
-
-% Combine Scatter Matrix
 S = inv(S_W) * S_B;
 
-% Calculate eigenvectors and eigenvalues
 [eigenvectors, eigenvalues] = eig(S);
 disp('Eigenvectors');
 disp(eigenvectors);
 disp('Eigenvalues');
 disp(eigenvalues);
-
 
 eigenvalues = diag(eigenvalues);
 % Sort the eigenvalues in descending order and get indices
@@ -70,7 +64,6 @@ feature_vector = eigenvectors(:, sort_index(1));
 disp(feature_vector);
 
 
-% Pressrue vs Vibration
 figure;
 hold on;
 quiver(0,0,feature_vector(1),feature_vector(2));
@@ -87,8 +80,6 @@ ylabel('v')
 legend()
 legend('LDA function','blackfoam', 'carsponge')
 
-
-% Pressure vs Temperature
 figure;
 hold on;
 quiver(0,0,feature_vector(1),feature_vector(3));
@@ -106,7 +97,6 @@ legend()
 legend('LDA function','blackfoam', 'carsponge')
 
 
-% Vibration vs Temperature
 figure;
 hold on;
 quiver(0,0,feature_vector(2),feature_vector(3));

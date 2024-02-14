@@ -1,3 +1,5 @@
+% A_3: 3D scatter plot of PVT
+
 % Load the data
 load('Lab1/F0_PVT.mat');
 
@@ -12,13 +14,12 @@ colors = lines(6);
 
 % Create a new figure
 figure;
-
 hold on;
+
 % Loop over each object and plot with a unique color
 for i = 1:size(Pressure, 1)
     scatter3(Pressure(i,:), Vibration(i,:), Temperature(i,:), 36, colors(i,:), 'filled');
 end
-
 hold off;
 
 % Label the axes
