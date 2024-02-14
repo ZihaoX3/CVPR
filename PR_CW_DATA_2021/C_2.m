@@ -44,8 +44,8 @@ for i = 1:size(X_car_sponge, 1)
     S_W = S_W + (X_car_sponge(i,:) - mean_car_sponge)' * (X_car_sponge(i,:) - mean_car_sponge);
 end
 
-mean_diff = mean_black_foam - mean_car_sponge;
-S_B = mean_diff' * mean_diff;
+S_B = (mean_black_foam - overall_mean)' * (mean_black_foam - overall_mean) + ...
+      (mean_car_sponge - overall_mean)' * (mean_car_sponge - overall_mean);
 
 % Solve the generalized eigenvalue problem
 [eigenvectors, eigenvalues] = eig(inv(S_W) * S_B);
